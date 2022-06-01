@@ -35,9 +35,9 @@ class Basket {
 
         const product = this.getBagelCode(productCode);
 
-         let total = product.price*quantity;
-         total =parseFloat(total.toFixed(2));
-         
+        let total = product.price * quantity;
+        total = parseFloat(total.toFixed(2));
+
         if (this.isEmptyObject(currentBasket)) {
             console.log('first');
             lastIndex = 0;
@@ -45,7 +45,7 @@ class Basket {
                 id: 1,
                 productCode: productCode,
                 quantity: quantity,
-                total:total
+                total: total
             })
             curentQuantity += quantity;
             console.log('curentQuantity' + curentQuantity);
@@ -55,13 +55,13 @@ class Basket {
             console.log('second');
             lastIndex = Object.keys(currentBasket).length;
             console.log('lastIndex ' + lastIndex);
-            
+
             currentBasket.push(
                 {
                     id: lastIndex + 1,
                     productCode: productCode,
                     quantity: quantity,
-                    total:total
+                    total: total
                 })
             curentQuantity += quantity;
             console.log('curentQuantity' + curentQuantity);
@@ -96,39 +96,39 @@ class Basket {
             return 'Item not found';
         }
     }
-    getTotal(){
+    getTotal() {
 
         const currentBasket = this.getBasket();
-        let discountCheck=true;
+        let discountCheck = true;
         let discount = 0, total = 0;
-        let extraDiscout = 0, pairPromo = [];
-        let discountFrom=[];
+        let extraDiscount = 0, pairPromo = [];
+        let discountFrom = [];
         for (const item of currentBasket) {
 
             const product = this.getBagelCode(item.productCode);
-          console.log('product '+product);
+            console.log('product ' + product);
             if (item.quantity >= product.promotion) {
                 discount = Math.floor(item.quantity / product.promotion) * product.discount;
                 console.log('discount' + discount);
                 total += (item.quantity * product.price) - discount;
-                discountCheck=false;
+                discountCheck = false;
                 discountFrom.push(
                     {
-                        name:product.flavour+' '+product.name+' '+product.special,
+                        name: product.flavour + ' ' + product.name + ' ' + product.special,
                     });
 
             } else {
                 total += (item.quantity * product.price);
-                discountCheck=false;
+                discountCheck = false;
             }
-            if (product.pair&&discountCheck) {
+            if (product.pair && discountCheck) {
                 const result = product.pairPromotion * item.quantity;
                 pairPromo.push(result);
                 discountFrom.push(
                     {
-                        name:'Meal deal : '+product.special,
+                        name: 'Meal deal : ' + product.special,
                     });
-            }
+      extraDiscount      }
         }
         console.log('Total: ', total);
         if (pairPromo.length > 0) {
@@ -136,36 +136,37 @@ class Basket {
                 console.log("ACC:" + sum + "  :" + discount);
                 return sum + discount;
             }, 0);
-            extraDiscout = Math.floor(promoDiscount / 0.13) * 0.13;
+            extraDiscount = Math.floor(promoDiscount / 0.13) * 0.13;
             console.log(Math.floor(promoDiscount / 0.13));
-            console.log('extraDiscout ' + extraDiscout);
-            total = total - extraDiscout;
+            console.log('extraDiscount ' + extraDiscount);
+            total = total - extraDiscount;
         }
 
         total = parseFloat(total.toFixed(2))
-        const newDiscount =  discount+extraDiscout
-         console.log('total '+ total+'newDiscount '+newDiscount);
-         this.setBasket(currentBasket);
-         currentBasket.push(
+        let newDiscount = 0;
+        newDiscount = discount + extraDiscount
+        console.log('total ' + total + 'newDiscount ' + newDiscount);
+        this.setBasket(currentBasket);
+        let updateBasket=JSON.parse(JSON.stringify(currentBasket));
+        updateBasket.push(
             {
                 Alltotal: total,
-                Alldiscount:newDiscount
+                Alldiscount: newDiscount
             });
-        
-        if(discountFrom.length>0){
-            for(let i=0; i<discountFrom.length;i++){
+
+        if (discountFrom.length > 0) {
+            for (let i = 0; i < discountFrom.length; i++) {
                 const discount = discountFrom[i].name;
-                
-                currentBasket.push(
+
+                updateBasket.push(
                     {
-                        discountFrom:discount
+                        discountFrom: discount
                     });
             }
         }
-        console.log('currentBasket ', currentBasket[0], currentBasket[1], currentBasket[2]);
-        console.log( currentBasket[3], currentBasket[4],currentBasket[5]);
-        
-        return currentBasket;
+      
+     
+        return updateBasket;
     }
     getBagelCode(productCode) {
         const bagelCode = [
@@ -177,7 +178,7 @@ class Basket {
                 promotion: 6,
                 pair: false,
                 discount: 0.45,
-                special:'6 for 2.49'
+                special: '6 for 2.49'
             },
             {
                 productCode: 'BGLP',
@@ -188,7 +189,7 @@ class Basket {
                 pair: true,
                 pairPromotion: 0.065,
                 discount: 0.69,
-                special:'12 for 3.99'
+                special: '12 for 3.99'
             },
             {
                 productCode: 'BGLE',
@@ -198,7 +199,7 @@ class Basket {
                 promotion: 6,
                 pair: false,
                 discount: 0.45,
-                special:'6 for 2.49'
+                special: '6 for 2.49'
             },
             {
                 productCode: 'COF',
@@ -209,7 +210,7 @@ class Basket {
                 pair: true,
                 pairPromotion: 0.065,
                 discount: 0,
-                special:'Coffee & Plain Bagel for 1.25'
+                special: 'Coffee & Plain Bagel for 1.25'
 
             }
         ]
@@ -221,34 +222,46 @@ class Basket {
         return Object.keys(object).length === 0;
     }
     printReceipt() {
-        let currentdate = new Date();
         const currentBasket = this.getBasket();
+        const updateBasket = this.getTotal(currentBasket);
+        let currentdate = new Date();
         let datetime = currentdate.getDate() + "/"
             + (currentdate.getMonth() + 1) + "/"
             + currentdate.getFullYear() + " @ "
             + currentdate.getHours() + ":"
             + currentdate.getMinutes() + ":"
             + currentdate.getSeconds();
+
         const fs = require('fs');
         const header = ` ~~~ Bob's Bagels ~~~\n${datetime}\n----------------------------\n`
         let str = "";
-        const size =currentBasket.length-1;
+        let size = updateBasket.length;
         console.log(size);
-        for (let i =0; i <size-2;i++){
-            console.log(currentBasket[i].productCode);
-            const product = this.getBagelCode(currentBasket[i].productCode);
-        str+=product.flavour+' '+product.name+' \t'+currentBasket[i].quantity+' '
-        +' £'+currentBasket[i].total+'\n'
+        let end=1;
+        if(updateBasket[size - 1].discountFrom){
+            end=2;
         }
+        for (let i = 0; i < size - end; i++) {
+           
+            const product = this.getBagelCode(updateBasket[i].productCode);
+            str += product.flavour + ' ' + product.name + ' \t' + updateBasket[i].quantity + ' '
+                + ' £' + updateBasket[i].total + '\n'
+        }
+
+        str += '----------------------------\n';
+        str += 'Total: ' + updateBasket[size - end].Alltotal + ' Discount: ' + updateBasket[size - end].Alldiscount + '\n'
+        if(updateBasket[size - 1].discountFrom){
+            str += 'You savings today from ' + updateBasket[size-1].discountFrom;
+        }
+       
         
-        str+='----------------------------\n';
-        str+='Total: '+currentBasket[size-2].Alltotal+' Discount: '+currentBasket[size-2].Alldiscount+'\n'
-        str+='You savings today from '+currentBasket[size-1].discountFrom;
+        
         const footer = '\nThank you for your order!'
-        fs.writeFile('receipt.txt', header+str+footer, (err) => {
+        
+        fs.writeFile('receipt.txt', header + str + footer, (err) => {
             if (err) throw err;
         })
-       
+
 
     }
 }
@@ -256,10 +269,12 @@ let listOfBaskets = [];
 
 const myBasket = new Basket();
 myBasket.addBagel('COF', 2);
-myBasket.addBagel('BGLE', 3);
+//myBasket.addBagel('BGLP', 20);
+myBasket.getTotal()
+myBasket.printReceipt();
 listOfBaskets.push(myBasket);
 
-const Basket2 = new Basket();
+/*const Basket2 = new Basket();
 Basket2.addBagel('BGLO', 2);
 Basket2.addBagel('BGLP', 12);
 Basket2.addBagel('BGLE', 6);
@@ -268,6 +283,6 @@ Basket2.addBagel('COF', 3);
 Basket2.getTotal();
 Basket2.printReceipt();
 listOfBaskets.push(Basket2);
-
+*/
 
 module.exports = Basket

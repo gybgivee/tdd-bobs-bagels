@@ -8,7 +8,8 @@ describe("Show Basket List", () => {
             {
                 'id':1,
                 'productCode': 'COF',
-                'quantity': 2
+                'quantity': 2,
+                'total':1.98
             }
         ]
         myBasket.addBagel('COF', 2);
@@ -21,7 +22,8 @@ describe("Show Basket List", () => {
             {
                 'id':1,
                 'productCode': 'COF',
-                'quantity': 30
+                'quantity': 30,
+                'total':29.7
             }
         ]
         const secondExpected = 'Sorry,your items in basket are already reach the limit';
@@ -38,7 +40,8 @@ describe("Show Basket List", () => {
             {
                 'id':1,
                 'productCode': 'COF',
-                'quantity': 2
+                'quantity': 2,
+                 'total':1.98
             }]
         myBasket.addBagel('COF', 2);
         myBasket.addBagel('BGLE', 3);
@@ -51,15 +54,16 @@ describe("Show Basket List", () => {
         myBasket.addBagel('BGLE', 3);
         expect(myBasket.removeById(3)).toEqual(expected)
       })
-      /*
       it("Get Total with promotion", () => {
 
         const myBasket = new Basket();
-        const expected = 16.18
-        myBasket.addBagel('COF', 20);
-        myBasket.addBagel('BGLP', 2);
-        expect(myBasket.getTotal()).toEqual(expected);
-      })*/
+        const expected = 9.09
+        myBasket.addBagel('COF', 2);
+        myBasket.addBagel('BGLP', 20);
+        const result = myBasket.getTotal()
+        const size=result.length;
+        expect(result[size-2].Alltotal).toEqual(expected);
+      })
 
 
 })

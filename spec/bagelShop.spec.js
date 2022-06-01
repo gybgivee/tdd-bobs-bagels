@@ -57,13 +57,27 @@ describe("Show Basket List", () => {
       it("Get Total with promotion", () => {
 
         const myBasket = new Basket();
-        const expected = 9.09
-        myBasket.addBagel('COF', 2);
-        myBasket.addBagel('BGLP', 20);
+        const expected = 10.43
+        myBasket.addBagel('BGLO', 2);
+        myBasket.addBagel('BGLP', 12);
+        myBasket.addBagel('BGLE', 6);
+        myBasket.addBagel('COF', 3);
         const result = myBasket.getTotal()
         const size=result.length;
-        expect(result[size-2].Alltotal).toEqual(expected);
+        expect(result[size-3].Alltotal).toEqual(expected);
       })
+      it("updateBasketLimit", () => {
+
+        const myBasket = new Basket();
+        const expected = 'Sorry,your items in basket are already reach the limit'
+        myBasket.updateBasketLimit(20);
+        myBasket.addBagel('BGLP', 20);
+        const result=myBasket.addBagel('COF', 2);
+        
+        expect(result).toEqual(expected);
+      })
+      
+
 
 
 })

@@ -99,19 +99,23 @@ class Basket {
     getTotal() {
 
         const currentBasket = this.getBasket();
-        let discountCheck = true;
+
         let discount = 0, total = 0;
         let extraDiscount = 0, pairPromo = [];
         let discountFrom = [];
+        let currentQuantity=0;
         for (const item of currentBasket) {
 
             const product = this.getBagelCode(item.productCode);
-            console.log('product ' + product);
+         
             if (item.quantity >= product.promotion) {
-                discount = Math.floor(item.quantity / product.promotion) * product.discount;
-                console.log('discount' + discount);
+                const numDiscount =Math.floor(item.quantity / product.promotion)
+                discount =  numDiscount * product.discount;
                 total += (item.quantity * product.price) - discount;
-                discountCheck = false;
+            
+                currentQuantity=numDiscount*product.promotion;
+                currentQuantity=item.quantity-currentQuantity;
+              
                 discountFrom.push(
                     {
                         name: product.flavour + ' ' + product.name + ' ' + product.special,
@@ -119,14 +123,14 @@ class Basket {
 
             } else {
                 total += (item.quantity * product.price);
-                discountCheck = false;
+                
             }
-            if (product.pair && discountCheck) {
-                const result = product.pairPromotion * item.quantity;
+            if (product.pair && currentQuantity>0) {
+                const result = product.pairPromotion * currentQuantity;
                 pairPromo.push(result);
                 discountFrom.push(
                     {
-                        name: 'Meal deal : ' + product.special,
+                        name: 'Coffee & Plain Bagel for 1.25',
                     });
       extraDiscount      }
         }
@@ -217,7 +221,9 @@ class Basket {
         const result = bagelCode.find(element => element.productCode === productCode);
         return result;
     }
-
+    updateBasketLimit(limit){
+        this.limit = limit;
+    }
     isEmptyObject(object) {
         return Object.keys(object).length === 0;
     }
@@ -235,26 +241,23 @@ class Basket {
         const fs = require('fs');
         const header = ` ~~~ Bob's Bagels ~~~\n${datetime}\n----------------------------\n`
         let str = "";
-        let size = updateBasket.length;
-        console.log(size);
-        let end=1;
-        if(updateBasket[size - 1].discountFrom){
-            end=2;
-        }
-        for (let i = 0; i < size - end; i++) {
+        const productSize=currentBasket.length;
+        for (let i = 0; i < productSize; i++) {
            
             const product = this.getBagelCode(updateBasket[i].productCode);
             str += product.flavour + ' ' + product.name + ' \t' + updateBasket[i].quantity + ' '
                 + ' £' + updateBasket[i].total + '\n'
         }
-
         str += '----------------------------\n';
-        str += 'Total: ' + updateBasket[size - end].Alltotal + ' Discount: ' + updateBasket[size - end].Alldiscount + '\n'
-        if(updateBasket[size - 1].discountFrom){
-            str += 'You savings today from ' + updateBasket[size-1].discountFrom;
-        }
-       
+        str += 'Total: ' + updateBasket[productSize].Alltotal + ' Discount: ' + updateBasket[productSize].Alldiscount + '\n'
         
+        const extraSize = updateBasket.length;
+        if(extraSize>productSize){
+            str += 'You savings today from \n';
+            for (let i=extraSize-1;i>productSize;i--){
+            str += '- '+updateBasket[i].discountFrom+'\n';
+            }
+        }
         
         const footer = '\nThank you for your order!'
         
@@ -267,14 +270,17 @@ class Basket {
 }
 let listOfBaskets = [];
 
+
 const myBasket = new Basket();
+myBasket.updateBasketLimit(20);
+myBasket.addBagel('BGLP', 20);
 myBasket.addBagel('COF', 2);
-//myBasket.addBagel('BGLP', 20);
 myBasket.getTotal()
 myBasket.printReceipt();
 listOfBaskets.push(myBasket);
 
-/*const Basket2 = new Basket();
+/*
+const Basket2 = new Basket();
 Basket2.addBagel('BGLO', 2);
 Basket2.addBagel('BGLP', 12);
 Basket2.addBagel('BGLE', 6);
@@ -284,5 +290,4 @@ Basket2.getTotal();
 Basket2.printReceipt();
 listOfBaskets.push(Basket2);
 */
-
 module.exports = Basket

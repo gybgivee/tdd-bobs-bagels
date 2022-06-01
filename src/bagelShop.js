@@ -103,19 +103,19 @@ class Basket {
         let discount = 0, total = 0;
         let extraDiscount = 0, pairPromo = [];
         let discountFrom = [];
-        let currentQuantity=0;
+        let currentQuantity = 0;
         for (const item of currentBasket) {
 
             const product = this.getBagelCode(item.productCode);
-         
+
             if (item.quantity >= product.promotion) {
-                const numDiscount =Math.floor(item.quantity / product.promotion)
-                discount =  numDiscount * product.discount;
+                const numDiscount = Math.floor(item.quantity / product.promotion)
+                discount = numDiscount * product.discount;
                 total += (item.quantity * product.price) - discount;
-            
-                currentQuantity=numDiscount*product.promotion;
-                currentQuantity=item.quantity-currentQuantity;
-              
+
+                currentQuantity = numDiscount * product.promotion;
+                currentQuantity = item.quantity - currentQuantity;
+
                 discountFrom.push(
                     {
                         name: product.flavour + ' ' + product.name + ' ' + product.special,
@@ -123,16 +123,17 @@ class Basket {
 
             } else {
                 total += (item.quantity * product.price);
-                
+
             }
-            if (product.pair && currentQuantity>0) {
+            if (product.pair && currentQuantity > 0) {
                 const result = product.pairPromotion * currentQuantity;
                 pairPromo.push(result);
                 discountFrom.push(
                     {
                         name: 'Coffee & Plain Bagel for 1.25',
                     });
-      extraDiscount      }
+                extraDiscount
+            }
         }
         console.log('Total: ', total);
         if (pairPromo.length > 0) {
@@ -151,7 +152,7 @@ class Basket {
         newDiscount = discount + extraDiscount
         console.log('total ' + total + 'newDiscount ' + newDiscount);
         this.setBasket(currentBasket);
-        let updateBasket=JSON.parse(JSON.stringify(currentBasket));
+        let updateBasket = JSON.parse(JSON.stringify(currentBasket));
         updateBasket.push(
             {
                 Alltotal: total,
@@ -168,8 +169,8 @@ class Basket {
                     });
             }
         }
-      
-     
+
+
         return updateBasket;
     }
     getBagelCode(productCode) {
@@ -221,7 +222,7 @@ class Basket {
         const result = bagelCode.find(element => element.productCode === productCode);
         return result;
     }
-    updateBasketLimit(limit){
+    updateBasketLimit(limit) {
         this.limit = limit;
     }
     isEmptyObject(object) {
@@ -241,32 +242,55 @@ class Basket {
         const fs = require('fs');
         const header = ` ~~~ Bob's Bagels ~~~\n${datetime}\n----------------------------\n`
         let str = "";
-        const productSize=currentBasket.length;
+        const productSize = currentBasket.length;
         for (let i = 0; i < productSize; i++) {
-           
+
             const product = this.getBagelCode(updateBasket[i].productCode);
             str += product.flavour + ' ' + product.name + ' \t' + updateBasket[i].quantity + ' '
                 + ' £' + updateBasket[i].total + '\n'
         }
         str += '----------------------------\n';
         str += 'Total: ' + updateBasket[productSize].Alltotal + ' Discount: ' + updateBasket[productSize].Alldiscount + '\n'
-        
+
         const extraSize = updateBasket.length;
-        if(extraSize>productSize){
+        if (extraSize > productSize) {
             str += 'You savings today from \n';
-            for (let i=extraSize-1;i>productSize;i--){
-            str += '- '+updateBasket[i].discountFrom+'\n';
+            for (let i = extraSize - 1; i > productSize; i--) {
+                str += '- ' + updateBasket[i].discountFrom + '\n';
             }
         }
-        
+
         const footer = '\nThank you for your order!'
-        
+
         fs.writeFile('receipt.txt', header + str + footer, (err) => {
             if (err) throw err;
         })
 
 
     }
+    sendMessage() {
+
+        const accountSid = 'AC654b90a6a5758fbb0fd8641bebf7d436'; // Your Account SID from www.twilio.com/console
+        const authToken = '442a97adf6d33d895c86b7b42ca8da84'; // Your Auth Token from www.twilio.com/console
+
+        const twilio = require('twilio');
+        const client = new twilio(accountSid, authToken);
+        const currentdate = new Date();
+        const recieved = currentdate.getHours() + "."
+        + currentdate.getMinutes();
+        const delivered = currentdate.getHours() + 1+"."
+        + currentdate.getMinutes();
+        /*
+        client.messages
+            .create({
+                body: `We have recieved your order at ${recieved} ! Your driver will delivered delicious bagels before ${delivered}\n~~Enjoy BoB's Bagels~~ `,
+                to: '+4407803571017', // Text this number
+                from: '+13516668860', // From a valid Twilio number
+            })
+            .then((message) => console.log(message.sid));
+         */
+    }
+
 }
 let listOfBaskets = [];
 
@@ -277,6 +301,7 @@ myBasket.addBagel('BGLP', 20);
 myBasket.addBagel('COF', 2);
 myBasket.getTotal()
 myBasket.printReceipt();
+myBasket.sendMessage();
 listOfBaskets.push(myBasket);
 
 /*

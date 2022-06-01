@@ -29,5 +29,8 @@
     "husky": "^7.0.4",
     "jasmine": "^3.99.0",
     "prettier": "^2.6.2"
+  },
+  "dependencies": {
+    "twilio": "^3.77.1"
   }
 }

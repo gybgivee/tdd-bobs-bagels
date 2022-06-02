@@ -2,6 +2,12 @@ const Basket = require("../src/bagelShop.js")
 
 describe("Show Basket List", () => {
 
+    it("Get item Price", () => {
+        const myBasket = new Basket();
+        const expected = 0.39
+        const result=myBasket.getItemPrice('BGLP')
+        expect(result).toEqual(expected)
+    })
     it("Single Basket List", () => {
         const myBasket = new Basket();
         const expected = [

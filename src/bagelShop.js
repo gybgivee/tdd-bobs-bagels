@@ -79,6 +79,10 @@ class Basket {
 
 
     }
+    getItemPrice(productCode) {
+        const product = this.getBagelCode(productCode);
+        return product.price;
+    }
     removeById(id) {
 
         const currentBasket = this.getBasket();
@@ -269,26 +273,27 @@ class Basket {
 
     }
     sendMessage() {
-
-        const accountSid = 'AC654b90a6a5758fbb0fd8641bebf7d436'; // Your Account SID from www.twilio.com/console
-        const authToken = '442a97adf6d33d895c86b7b42ca8da84'; // Your Auth Token from www.twilio.com/console
-
+        const key = require('../config.js');
+        const accountSid = key.API.TWILIO_API_KEY;
+        const authToken = key.API.TWILIO_AUTH_TOKEN;
+      
         const twilio = require('twilio');
         const client = new twilio(accountSid, authToken);
         const currentdate = new Date();
         const recieved = currentdate.getHours() + "."
-        + currentdate.getMinutes();
-        const delivered = currentdate.getHours() + 1+"."
-        + currentdate.getMinutes();
-        /*
+            + currentdate.getMinutes();
+        const delivered = currentdate.getHours() + 1 + "."
+            + currentdate.getMinutes();
+        
+            
         client.messages
             .create({
                 body: `We have recieved your order at ${recieved} ! Your driver will delivered delicious bagels before ${delivered}\n~~Enjoy BoB's Bagels~~ `,
-                to: '+4407803571017', // Text this number
+                to: '+4407842871923', // Text this number
                 from: '+13516668860', // From a valid Twilio number
             })
             .then((message) => console.log(message.sid));
-         */
+         
     }
 
 }
@@ -297,6 +302,7 @@ let listOfBaskets = [];
 
 const myBasket = new Basket();
 myBasket.updateBasketLimit(20);
+console.log('Price :' + myBasket.getItemPrice('BGLP'));
 myBasket.addBagel('BGLP', 20);
 myBasket.addBagel('COF', 2);
 myBasket.getTotal()

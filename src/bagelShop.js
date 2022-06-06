@@ -34,7 +34,9 @@ class Basket {
         let lastIndex;
 
         const product = this.getBagelCode(productCode);
-
+        if (product === null || product === undefined) {
+            return 'Product not found'
+        }
         let total = product.price * quantity;
         total = parseFloat(total.toFixed(2));
 
@@ -112,6 +114,9 @@ class Basket {
 
             const product = this.getBagelCode(item.productCode);
 
+            product.stock = product.stock - item.quantity;
+            console.log('product.stock ' + product.stock);
+
             if (item.quantity >= product.promotion) {
                 const numDiscount = Math.floor(item.quantity / product.promotion)
                 discount = numDiscount * product.discount;
@@ -183,6 +188,7 @@ class Basket {
                 productCode: 'BGLO',
                 name: 'Bagel',
                 flavour: 'Onion',
+                stock: 100,
                 price: 0.49,
                 promotion: 6,
                 pair: false,
@@ -193,6 +199,7 @@ class Basket {
                 productCode: 'BGLP',
                 name: 'Bagel',
                 flavour: 'Plain',
+                stock: 100,
                 price: 0.39,
                 promotion: 12,
                 pair: true,
@@ -204,6 +211,7 @@ class Basket {
                 productCode: 'BGLE',
                 name: 'Bagel',
                 flavour: 'Everything',
+                stock: 100,
                 price: 0.49,
                 promotion: 6,
                 pair: false,
@@ -213,6 +221,7 @@ class Basket {
             {
                 productCode: 'COF',
                 flavour: ' ',
+                stock: 100,
                 name: 'Coffee',
                 price: 0.99,
                 promotion: 99999,
@@ -276,7 +285,7 @@ class Basket {
         const key = require('../config.js');
         const accountSid = key.API.TWILIO_API_KEY;
         const authToken = key.API.TWILIO_AUTH_TOKEN;
-      
+
         const twilio = require('twilio');
         const client = new twilio(accountSid, authToken);
         const currentdate = new Date();
@@ -284,31 +293,46 @@ class Basket {
             + currentdate.getMinutes();
         const delivered = currentdate.getHours() + 1 + "."
             + currentdate.getMinutes();
-        
-            
-        client.messages
-            .create({
-                body: `We have recieved your order at ${recieved} ! Your driver will delivered delicious bagels before ${delivered}\n~~Enjoy BoB's Bagels~~ `,
-                to: '+4407842871923', // Text this number
-                from: '+13516668860', // From a valid Twilio number
-            })
-            .then((message) => console.log(message.sid));
-         
+
+        /*
+    client.messages
+        .create({
+            body: `We have recieved your order at ${recieved} ! Your driver will delivered delicious bagels before ${delivered}\n~~Enjoy BoB's Bagels~~ `,
+            to: '+4407842871923', // Text this number
+            from: '+13516668860', // From a valid Twilio number
+        })
+        .then((message) => console.log(message.sid));
+     */
     }
 
 }
 let listOfBaskets = [];
-
+let currentdate = new Date();
+let datetime = currentdate.getDate() + "/"
+    + (currentdate.getMonth()+1) + "/"
+    + currentdate.getFullYear();
 
 const myBasket = new Basket();
-myBasket.updateBasketLimit(20);
+
+listOfBaskets.push({date:datetime});
+
+//myBasket.updateBasketLimit(20);
 console.log('Price :' + myBasket.getItemPrice('BGLP'));
 myBasket.addBagel('BGLP', 20);
 myBasket.addBagel('COF', 2);
+myBasket.addBagel('COF4', 2);
 myBasket.getTotal()
 myBasket.printReceipt();
 myBasket.sendMessage();
-listOfBaskets.push(myBasket);
+listOfBaskets.push(myBasket.getBasket());
+console.log('listOfBaskets[0] '+listOfBaskets.length);
+console.log('listOfBaskets '+listOfBaskets[0].date);
+console.log('listOfBaskets '+listOfBaskets[1][0].productCode);
+console.log('listOfBaskets '+listOfBaskets[1][1].productCode);
+
+
+
+
 
 /*
 const Basket2 = new Basket();

@@ -1,10 +1,12 @@
  ~~~ Bob's Bagels ~~~
-2/6/2022 @ 10:47:5
+6/6/2022 @ 11:16:44
 ----------------------------
 Plain Bagel 	20  £7.8
+  Coffee 	2  £1.98
 ----------------------------
-Total: 6.59 Discount: 1.21
+Total: 8.05 Discount: 1.73
 You savings today from 
+- Coffee & Plain Bagel for 1.25
 - Coffee & Plain Bagel for 1.25
 - Plain Bagel 12 for 3.99
 

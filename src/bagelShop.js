@@ -114,9 +114,6 @@ class Basket {
 
             const product = this.getBagelCode(item.productCode);
 
-            product.stock = product.stock - item.quantity;
-            console.log('product.stock ' + product.stock);
-
             if (item.quantity >= product.promotion) {
                 const numDiscount = Math.floor(item.quantity / product.promotion)
                 discount = numDiscount * product.discount;
@@ -188,7 +185,6 @@ class Basket {
                 productCode: 'BGLO',
                 name: 'Bagel',
                 flavour: 'Onion',
-                stock: 100,
                 price: 0.49,
                 promotion: 6,
                 pair: false,
@@ -199,7 +195,6 @@ class Basket {
                 productCode: 'BGLP',
                 name: 'Bagel',
                 flavour: 'Plain',
-                stock: 100,
                 price: 0.39,
                 promotion: 12,
                 pair: true,
@@ -211,7 +206,6 @@ class Basket {
                 productCode: 'BGLE',
                 name: 'Bagel',
                 flavour: 'Everything',
-                stock: 100,
                 price: 0.49,
                 promotion: 6,
                 pair: false,
@@ -221,7 +215,6 @@ class Basket {
             {
                 productCode: 'COF',
                 flavour: ' ',
-                stock: 100,
                 name: 'Coffee',
                 price: 0.99,
                 promotion: 99999,
@@ -233,6 +226,7 @@ class Basket {
             }
         ]
         const result = bagelCode.find(element => element.productCode === productCode);
+        console.log('result '+result);
         return result;
     }
     updateBasketLimit(limit) {
@@ -304,19 +298,19 @@ class Basket {
         .then((message) => console.log(message.sid));
      */
     }
-
+   
 }
 let listOfBaskets = [];
 let currentdate = new Date();
 let datetime = currentdate.getDate() + "/"
-    + (currentdate.getMonth()+1) + "/"
+    + (currentdate.getMonth() + 1) + "/"
     + currentdate.getFullYear();
 
 const myBasket = new Basket();
 
-listOfBaskets.push({date:datetime});
-
-//myBasket.updateBasketLimit(20);
+//listOfBaskets.push({ date: datetime });
+/*
+myBasket.updateBasketLimit(20);
 console.log('Price :' + myBasket.getItemPrice('BGLP'));
 myBasket.addBagel('BGLP', 20);
 myBasket.addBagel('COF', 2);
@@ -329,10 +323,7 @@ console.log('listOfBaskets[0] '+listOfBaskets.length);
 console.log('listOfBaskets '+listOfBaskets[0].date);
 console.log('listOfBaskets '+listOfBaskets[1][0].productCode);
 console.log('listOfBaskets '+listOfBaskets[1][1].productCode);
-
-
-
-
+*/
 
 /*
 const Basket2 = new Basket();
@@ -345,4 +336,7 @@ Basket2.getTotal();
 Basket2.printReceipt();
 listOfBaskets.push(Basket2);
 */
+
+
+
 module.exports = Basket

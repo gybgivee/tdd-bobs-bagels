@@ -83,7 +83,4 @@ describe("Show Basket List", () => {
         expect(result).toEqual(expected);
       })
       
-
-
-
 })

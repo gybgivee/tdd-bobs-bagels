@@ -1,13 +1,14 @@
  ~~~ Bob's Bagels ~~~
-6/6/2022 @ 11:16:44
+7/6/2022 @ 9:30:55
 ----------------------------
-Plain Bagel 	20  £7.8
-  Coffee 	2  £1.98
+Onion Bagel 	2  £0.98
+Plain Bagel 	12  £4.68
+Everything Bagel 	6  £2.94
+  Coffee 	3  £2.97
 ----------------------------
-Total: 8.05 Discount: 1.73
+Total: 10.43 Discount: 0.45
 You savings today from 
-- Coffee & Plain Bagel for 1.25
-- Coffee & Plain Bagel for 1.25
+- Everything Bagel 6 for 2.49
 - Plain Bagel 12 for 3.99
 
 Thank you for your order!

@@ -77,3 +77,4 @@ console.log('myStock3 :'+myStock3.stock);
 
 
 module.exports = Stock
+//npx jasmine stock.spec.js --random=false 

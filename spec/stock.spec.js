@@ -50,7 +50,7 @@ const myStockDetails = [
 ]
 
 describe("Show Stock List", () => {
-/*
+
     it("Add stock", () => {
         const myStock = new Stock(myStockDetails);
         const expected = 110;
@@ -59,17 +59,15 @@ describe("Show Stock List", () => {
 
         expect(result.stock).toEqual(expected);
     })
-    */
-   /*
+ 
     it("Remove stock", () => {
         const myStock = new Stock(myStockDetails);
-        const expected = 90;
+        const expected = 100;
          myStock.updateStock('BGLO', -10);
         const result = myStock.getStock('BGLO');
         expect(result.stock).toEqual(expected);
     })
-    */
-   
+
     it("Delete stock", () => {
         const myStock = new Stock(myStockDetails);
         const expected = 0;

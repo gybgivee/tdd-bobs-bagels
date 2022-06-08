@@ -138,7 +138,7 @@ class Basket {
                     {
                         name: 'Coffee & Plain Bagel for 1.25',
                     });
-                extraDiscount
+                
             }
         }
         console.log('Total: ', total);
